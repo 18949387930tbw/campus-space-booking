@@ -1,21 +1,21 @@
 import { EllipsisVertical } from "lucide-react"
 import { useState } from "react"
 
-import type { ItemPublic } from "@/client"
+import type { VenuePublic } from "@/client"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import DeleteItem from "../Items/DeleteItem"
-import EditItem from "../Items/EditItem"
+import DeleteVenue from "./DeleteVenue"
+import EditVenue from "./EditVenue"
 
-interface ItemActionsMenuProps {
-  item: ItemPublic
+interface VenueActionsMenuProps {
+  venue: VenuePublic
 }
 
-export const ItemActionsMenu = ({ item }: ItemActionsMenuProps) => {
+export const VenueActionsMenu = ({ venue }: VenueActionsMenuProps) => {
   const [open, setOpen] = useState(false)
 
   return (
@@ -23,11 +23,12 @@ export const ItemActionsMenu = ({ item }: ItemActionsMenuProps) => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
           <EllipsisVertical />
+          <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <EditItem item={item} onSuccess={() => setOpen(false)} />
-        <DeleteItem id={item.id} onSuccess={() => setOpen(false)} />
+        <EditVenue venue={venue} onSuccess={() => setOpen(false)} />
+        <DeleteVenue id={venue.id} onSuccess={() => setOpen(false)} />
       </DropdownMenuContent>
     </DropdownMenu>
   )

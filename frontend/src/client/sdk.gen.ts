@@ -2,7 +2,7 @@
 
 import { type Client, type Options as Options2, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { itemsCreateItemData, itemsCreateItemErrors, itemsCreateItemResponses, itemsDeleteItemData, itemsDeleteItemErrors, itemsDeleteItemResponses, itemsReadItemData, itemsReadItemErrors, itemsReadItemResponses, itemsReadItemsData, itemsReadItemsErrors, itemsReadItemsResponses, itemsUpdateItemData, itemsUpdateItemErrors, itemsUpdateItemResponses, loginLoginAccessTokenData, loginLoginAccessTokenErrors, loginLoginAccessTokenResponses, loginRecoverPasswordData, loginRecoverPasswordErrors, loginRecoverPasswordHtmlContentData, loginRecoverPasswordHtmlContentErrors, loginRecoverPasswordHtmlContentResponses, loginRecoverPasswordResponses, loginResetPasswordData, loginResetPasswordErrors, loginResetPasswordResponses, loginTestTokenData, loginTestTokenResponses, privateCreateUserData, privateCreateUserErrors, privateCreateUserResponses, usersCreateUserData, usersCreateUserErrors, usersCreateUserResponses, usersDeleteUserData, usersDeleteUserErrors, usersDeleteUserMeData, usersDeleteUserMeResponses, usersDeleteUserResponses, usersReadUserByIdData, usersReadUserByIdErrors, usersReadUserByIdResponses, usersReadUserMeData, usersReadUserMeResponses, usersReadUsersData, usersReadUsersErrors, usersReadUsersResponses, usersRegisterUserData, usersRegisterUserErrors, usersRegisterUserResponses, usersUpdatePasswordMeData, usersUpdatePasswordMeErrors, usersUpdatePasswordMeResponses, usersUpdateUserData, usersUpdateUserErrors, usersUpdateUserMeData, usersUpdateUserMeErrors, usersUpdateUserMeResponses, usersUpdateUserResponses, utilsHealthCheckData, utilsHealthCheckResponses, utilsTestEmailData, utilsTestEmailErrors, utilsTestEmailResponses } from './types.gen';
+import type { bookingsApproveBookingData, bookingsApproveBookingErrors, bookingsApproveBookingResponses, bookingsCancelBookingData, bookingsCancelBookingErrors, bookingsCancelBookingResponses, bookingsCreateBookingData, bookingsCreateBookingErrors, bookingsCreateBookingResponses, bookingsDeleteBookingData, bookingsDeleteBookingErrors, bookingsDeleteBookingResponses, bookingsReadBookingData, bookingsReadBookingErrors, bookingsReadBookingResponses, bookingsReadBookingsData, bookingsReadBookingsErrors, bookingsReadBookingsResponses, bookingsRejectBookingData, bookingsRejectBookingErrors, bookingsRejectBookingResponses, loginLoginAccessTokenData, loginLoginAccessTokenErrors, loginLoginAccessTokenResponses, loginRecoverPasswordData, loginRecoverPasswordErrors, loginRecoverPasswordHtmlContentData, loginRecoverPasswordHtmlContentErrors, loginRecoverPasswordHtmlContentResponses, loginRecoverPasswordResponses, loginResetPasswordData, loginResetPasswordErrors, loginResetPasswordResponses, loginTestTokenData, loginTestTokenResponses, privateCreateUserData, privateCreateUserErrors, privateCreateUserResponses, usersCreateUserData, usersCreateUserErrors, usersCreateUserResponses, usersDeleteUserData, usersDeleteUserErrors, usersDeleteUserMeData, usersDeleteUserMeResponses, usersDeleteUserResponses, usersReadUserByIdData, usersReadUserByIdErrors, usersReadUserByIdResponses, usersReadUserMeData, usersReadUserMeResponses, usersReadUsersData, usersReadUsersErrors, usersReadUsersResponses, usersRegisterUserData, usersRegisterUserErrors, usersRegisterUserResponses, usersUpdatePasswordMeData, usersUpdatePasswordMeErrors, usersUpdatePasswordMeResponses, usersUpdateUserData, usersUpdateUserErrors, usersUpdateUserMeData, usersUpdateUserMeErrors, usersUpdateUserMeResponses, usersUpdateUserResponses, utilsHealthCheckData, utilsHealthCheckResponses, utilsTestEmailData, utilsTestEmailErrors, utilsTestEmailResponses, venuesCreateVenueData, venuesCreateVenueErrors, venuesCreateVenueResponses, venuesDeleteVenueData, venuesDeleteVenueErrors, venuesDeleteVenueResponses, venuesReadVenueData, venuesReadVenueErrors, venuesReadVenueResponses, venuesReadVenuesData, venuesReadVenuesErrors, venuesReadVenuesResponses, venuesUpdateVenueData, venuesUpdateVenueErrors, venuesUpdateVenueResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -284,31 +284,27 @@ export class UtilsService {
     }
 }
 
-export class ItemsService {
+export class VenuesService {
     /**
-     * Read Items
-     *
-     * Retrieve items.
+     * Read Venues
      */
-    public static readItems<ThrowOnError extends boolean = true>(options?: Options<itemsReadItemsData, ThrowOnError>) {
-        return (options?.client ?? client).get<itemsReadItemsResponses, itemsReadItemsErrors, ThrowOnError>({
+    public static readVenues<ThrowOnError extends boolean = true>(options?: Options<venuesReadVenuesData, ThrowOnError>) {
+        return (options?.client ?? client).get<venuesReadVenuesResponses, venuesReadVenuesErrors, ThrowOnError>({
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/items/',
+            url: '/api/v1/venues/',
             ...options
         });
     }
     
     /**
-     * Create Item
-     *
-     * Create new item.
+     * Create Venue
      */
-    public static createItem<ThrowOnError extends boolean = true>(options: Options<itemsCreateItemData, ThrowOnError>) {
-        return (options.client ?? client).post<itemsCreateItemResponses, itemsCreateItemErrors, ThrowOnError>({
+    public static createVenue<ThrowOnError extends boolean = true>(options: Options<venuesCreateVenueData, ThrowOnError>) {
+        return (options.client ?? client).post<venuesCreateVenueResponses, venuesCreateVenueErrors, ThrowOnError>({
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/items/',
+            url: '/api/v1/venues/',
             ...options,
             headers: {
                 'Content-Type': 'application/json',
@@ -318,48 +314,132 @@ export class ItemsService {
     }
     
     /**
-     * Delete Item
-     *
-     * Delete an item.
+     * Delete Venue
      */
-    public static deleteItem<ThrowOnError extends boolean = true>(options: Options<itemsDeleteItemData, ThrowOnError>) {
-        return (options.client ?? client).delete<itemsDeleteItemResponses, itemsDeleteItemErrors, ThrowOnError>({
+    public static deleteVenue<ThrowOnError extends boolean = true>(options: Options<venuesDeleteVenueData, ThrowOnError>) {
+        return (options.client ?? client).delete<venuesDeleteVenueResponses, venuesDeleteVenueErrors, ThrowOnError>({
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/items/{id}',
+            url: '/api/v1/venues/{venue_id}',
             ...options
         });
     }
     
     /**
-     * Read Item
-     *
-     * Get item by ID.
+     * Read Venue
      */
-    public static readItem<ThrowOnError extends boolean = true>(options: Options<itemsReadItemData, ThrowOnError>) {
-        return (options.client ?? client).get<itemsReadItemResponses, itemsReadItemErrors, ThrowOnError>({
+    public static readVenue<ThrowOnError extends boolean = true>(options: Options<venuesReadVenueData, ThrowOnError>) {
+        return (options.client ?? client).get<venuesReadVenueResponses, venuesReadVenueErrors, ThrowOnError>({
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/items/{id}',
+            url: '/api/v1/venues/{venue_id}',
             ...options
         });
     }
     
     /**
-     * Update Item
-     *
-     * Update an item.
+     * Update Venue
      */
-    public static updateItem<ThrowOnError extends boolean = true>(options: Options<itemsUpdateItemData, ThrowOnError>) {
-        return (options.client ?? client).put<itemsUpdateItemResponses, itemsUpdateItemErrors, ThrowOnError>({
+    public static updateVenue<ThrowOnError extends boolean = true>(options: Options<venuesUpdateVenueData, ThrowOnError>) {
+        return (options.client ?? client).patch<venuesUpdateVenueResponses, venuesUpdateVenueErrors, ThrowOnError>({
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/items/{id}',
+            url: '/api/v1/venues/{venue_id}',
             ...options,
             headers: {
                 'Content-Type': 'application/json',
                 ...options.headers
             }
+        });
+    }
+}
+
+export class BookingsService {
+    /**
+     * Read Bookings
+     */
+    public static readBookings<ThrowOnError extends boolean = true>(options?: Options<bookingsReadBookingsData, ThrowOnError>) {
+        return (options?.client ?? client).get<bookingsReadBookingsResponses, bookingsReadBookingsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/bookings/',
+            ...options
+        });
+    }
+    
+    /**
+     * Create Booking
+     */
+    public static createBooking<ThrowOnError extends boolean = true>(options: Options<bookingsCreateBookingData, ThrowOnError>) {
+        return (options.client ?? client).post<bookingsCreateBookingResponses, bookingsCreateBookingErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/bookings/',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Delete Booking
+     */
+    public static deleteBooking<ThrowOnError extends boolean = true>(options: Options<bookingsDeleteBookingData, ThrowOnError>) {
+        return (options.client ?? client).delete<bookingsDeleteBookingResponses, bookingsDeleteBookingErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/bookings/{booking_id}',
+            ...options
+        });
+    }
+    
+    /**
+     * Read Booking
+     */
+    public static readBooking<ThrowOnError extends boolean = true>(options: Options<bookingsReadBookingData, ThrowOnError>) {
+        return (options.client ?? client).get<bookingsReadBookingResponses, bookingsReadBookingErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/bookings/{booking_id}',
+            ...options
+        });
+    }
+    
+    /**
+     * Approve Booking
+     */
+    public static approveBooking<ThrowOnError extends boolean = true>(options: Options<bookingsApproveBookingData, ThrowOnError>) {
+        return (options.client ?? client).post<bookingsApproveBookingResponses, bookingsApproveBookingErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/bookings/{booking_id}/approve',
+            ...options
+        });
+    }
+    
+    /**
+     * Reject Booking
+     */
+    public static rejectBooking<ThrowOnError extends boolean = true>(options: Options<bookingsRejectBookingData, ThrowOnError>) {
+        return (options.client ?? client).post<bookingsRejectBookingResponses, bookingsRejectBookingErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/bookings/{booking_id}/reject',
+            ...options
+        });
+    }
+    
+    /**
+     * Cancel Booking
+     */
+    public static cancelBooking<ThrowOnError extends boolean = true>(options: Options<bookingsCancelBookingData, ThrowOnError>) {
+        return (options.client ?? client).post<bookingsCancelBookingResponses, bookingsCancelBookingErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/bookings/{booking_id}/cancel',
+            ...options
         });
     }
 }

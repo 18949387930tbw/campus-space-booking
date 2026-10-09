@@ -3,7 +3,7 @@ import { Trash2 } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
-import { ItemsService } from "@/client"
+import { VenuesService } from "@/client"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -19,31 +19,31 @@ import { LoadingButton } from "@/components/ui/loading-button"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 
-interface DeleteItemProps {
+interface DeleteVenueProps {
   id: string
   onSuccess: () => void
 }
 
-const DeleteItem = ({ id, onSuccess }: DeleteItemProps) => {
+const DeleteVenue = ({ id, onSuccess }: DeleteVenueProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const { showSuccessToast, showErrorToast } = useCustomToast()
   const { handleSubmit } = useForm()
 
-  const deleteItem = async (id: string) => {
-    await ItemsService.deleteItem({ path: { id } })
+  const deleteVenue = async (id: string) => {
+    await VenuesService.deleteVenue({ path: { venue_id: id } })
   }
 
   const mutation = useMutation({
-    mutationFn: deleteItem,
+    mutationFn: deleteVenue,
     onSuccess: () => {
-      showSuccessToast("The item was deleted successfully")
+      showSuccessToast("The venue was deleted successfully")
       setIsOpen(false)
       onSuccess()
     },
     onError: handleError.bind(showErrorToast),
     onSettled: () => {
-      queryClient.invalidateQueries()
+      queryClient.invalidateQueries({ queryKey: ["venues"] })
     },
   })
 
@@ -59,15 +59,15 @@ const DeleteItem = ({ id, onSuccess }: DeleteItemProps) => {
         onClick={() => setIsOpen(true)}
       >
         <Trash2 />
-        Delete Item
+        Delete Venue
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Delete Item</DialogTitle>
+            <DialogTitle>Delete Venue</DialogTitle>
             <DialogDescription>
-              This item will be permanently deleted. Are you sure? You will not
-              be able to undo this action.
+              This will permanently delete this venue and its bookings. Are you
+              sure? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
 
@@ -91,4 +91,4 @@ const DeleteItem = ({ id, onSuccess }: DeleteItemProps) => {
   )
 }
 
-export default DeleteItem
+export default DeleteVenue

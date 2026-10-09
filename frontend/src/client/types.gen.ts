@@ -35,6 +35,90 @@ export type Body_login_login_access_token = {
 };
 
 /**
+ * BookingCreate
+ */
+export type BookingCreate = {
+    /**
+     * Venue Id
+     */
+    venue_id: string;
+    /**
+     * Start Time
+     */
+    start_time: string;
+    /**
+     * End Time
+     */
+    end_time: string;
+    /**
+     * Purpose
+     */
+    purpose: string;
+};
+
+/**
+ * BookingPublic
+ */
+export type BookingPublic = {
+    /**
+     * Venue Id
+     */
+    venue_id: string;
+    /**
+     * Start Time
+     */
+    start_time: string;
+    /**
+     * End Time
+     */
+    end_time: string;
+    /**
+     * Purpose
+     */
+    purpose: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * User Id
+     */
+    user_id: string;
+    status: BookingStatus;
+    /**
+     * Decided By Id
+     */
+    decided_by_id?: string | null;
+    /**
+     * Decided At
+     */
+    decided_at?: string | null;
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
+ * BookingStatus
+ */
+export type BookingStatus = 'pending' | 'approved' | 'rejected' | 'cancelled';
+
+/**
+ * BookingsPublic
+ */
+export type BookingsPublic = {
+    /**
+     * Data
+     */
+    data: Array<BookingPublic>;
+    /**
+     * Count
+     */
+    count: number;
+};
+
+/**
  * HTTPValidationError
  */
 export type HTTPValidationError = {
@@ -42,74 +126,6 @@ export type HTTPValidationError = {
      * Detail
      */
     detail?: Array<ValidationError>;
-};
-
-/**
- * ItemCreate
- */
-export type ItemCreate = {
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Description
-     */
-    description?: string | null;
-};
-
-/**
- * ItemPublic
- */
-export type ItemPublic = {
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Description
-     */
-    description?: string | null;
-    /**
-     * Id
-     */
-    id: string;
-    /**
-     * Owner Id
-     */
-    owner_id: string;
-    /**
-     * Created At
-     */
-    created_at?: string | null;
-};
-
-/**
- * ItemUpdate
- */
-export type ItemUpdate = {
-    /**
-     * Title
-     */
-    title?: string | null;
-    /**
-     * Description
-     */
-    description?: string | null;
-};
-
-/**
- * ItemsPublic
- */
-export type ItemsPublic = {
-    /**
-     * Data
-     */
-    data: Array<ItemPublic>;
-    /**
-     * Count
-     */
-    count: number;
 };
 
 /**
@@ -206,6 +222,7 @@ export type UserCreate = {
      * Full Name
      */
     full_name?: string | null;
+    role?: UserRole;
     /**
      * Password
      */
@@ -232,6 +249,7 @@ export type UserPublic = {
      * Full Name
      */
     full_name?: string | null;
+    role?: UserRole;
     /**
      * Id
      */
@@ -261,6 +279,11 @@ export type UserRegister = {
 };
 
 /**
+ * UserRole
+ */
+export type UserRole = 'student' | 'teacher' | 'admin';
+
+/**
  * UserUpdate
  */
 export type UserUpdate = {
@@ -280,6 +303,7 @@ export type UserUpdate = {
      * Full Name
      */
     full_name?: string | null;
+    role?: UserRole | null;
     /**
      * Password
      */
@@ -340,6 +364,130 @@ export type ValidationError = {
     ctx?: {
         [key: string]: unknown;
     };
+};
+
+/**
+ * VenueCreate
+ */
+export type VenueCreate = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Location
+     */
+    location: string;
+    /**
+     * Capacity
+     */
+    capacity: number;
+    /**
+     * Open Time
+     */
+    open_time: string;
+    /**
+     * Close Time
+     */
+    close_time: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean;
+};
+
+/**
+ * VenuePublic
+ */
+export type VenuePublic = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Location
+     */
+    location: string;
+    /**
+     * Capacity
+     */
+    capacity: number;
+    /**
+     * Open Time
+     */
+    open_time: string;
+    /**
+     * Close Time
+     */
+    close_time: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
+ * VenueUpdate
+ */
+export type VenueUpdate = {
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Location
+     */
+    location?: string | null;
+    /**
+     * Capacity
+     */
+    capacity?: number | null;
+    /**
+     * Open Time
+     */
+    open_time?: string | null;
+    /**
+     * Close Time
+     */
+    close_time?: string | null;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean | null;
+};
+
+/**
+ * VenuesPublic
+ */
+export type VenuesPublic = {
+    /**
+     * Data
+     */
+    data: Array<VenuePublic>;
+    /**
+     * Count
+     */
+    count: number;
 };
 
 export type loginLoginAccessTokenData = {
@@ -772,7 +920,7 @@ export type utilsHealthCheckResponses = {
 
 export type utilsHealthCheckResponse = utilsHealthCheckResponses[keyof utilsHealthCheckResponses];
 
-export type itemsReadItemsData = {
+export type venuesReadVenuesData = {
     body?: never;
     path?: never;
     query?: {
@@ -785,141 +933,354 @@ export type itemsReadItemsData = {
          */
         limit?: number;
     };
-    url: '/api/v1/items/';
+    url: '/api/v1/venues/';
 };
 
-export type itemsReadItemsErrors = {
+export type venuesReadVenuesErrors = {
     /**
      * Validation Error
      */
     422: HTTPValidationError;
 };
 
-export type itemsReadItemsError = itemsReadItemsErrors[keyof itemsReadItemsErrors];
+export type venuesReadVenuesError = venuesReadVenuesErrors[keyof venuesReadVenuesErrors];
 
-export type itemsReadItemsResponses = {
+export type venuesReadVenuesResponses = {
     /**
      * Successful Response
      */
-    200: ItemsPublic;
+    200: VenuesPublic;
 };
 
-export type itemsReadItemsResponse = itemsReadItemsResponses[keyof itemsReadItemsResponses];
+export type venuesReadVenuesResponse = venuesReadVenuesResponses[keyof venuesReadVenuesResponses];
 
-export type itemsCreateItemData = {
-    body: ItemCreate;
+export type venuesCreateVenueData = {
+    body: VenueCreate;
     path?: never;
     query?: never;
-    url: '/api/v1/items/';
+    url: '/api/v1/venues/';
 };
 
-export type itemsCreateItemErrors = {
+export type venuesCreateVenueErrors = {
     /**
      * Validation Error
      */
     422: HTTPValidationError;
 };
 
-export type itemsCreateItemError = itemsCreateItemErrors[keyof itemsCreateItemErrors];
+export type venuesCreateVenueError = venuesCreateVenueErrors[keyof venuesCreateVenueErrors];
 
-export type itemsCreateItemResponses = {
+export type venuesCreateVenueResponses = {
     /**
      * Successful Response
      */
-    200: ItemPublic;
+    200: VenuePublic;
 };
 
-export type itemsCreateItemResponse = itemsCreateItemResponses[keyof itemsCreateItemResponses];
+export type venuesCreateVenueResponse = venuesCreateVenueResponses[keyof venuesCreateVenueResponses];
 
-export type itemsDeleteItemData = {
+export type venuesDeleteVenueData = {
     body?: never;
     path: {
         /**
-         * Id
+         * Venue Id
          */
-        id: string;
+        venue_id: string;
     };
     query?: never;
-    url: '/api/v1/items/{id}';
+    url: '/api/v1/venues/{venue_id}';
 };
 
-export type itemsDeleteItemErrors = {
+export type venuesDeleteVenueErrors = {
     /**
      * Validation Error
      */
     422: HTTPValidationError;
 };
 
-export type itemsDeleteItemError = itemsDeleteItemErrors[keyof itemsDeleteItemErrors];
+export type venuesDeleteVenueError = venuesDeleteVenueErrors[keyof venuesDeleteVenueErrors];
 
-export type itemsDeleteItemResponses = {
+export type venuesDeleteVenueResponses = {
     /**
      * Successful Response
      */
     200: Message;
 };
 
-export type itemsDeleteItemResponse = itemsDeleteItemResponses[keyof itemsDeleteItemResponses];
+export type venuesDeleteVenueResponse = venuesDeleteVenueResponses[keyof venuesDeleteVenueResponses];
 
-export type itemsReadItemData = {
+export type venuesReadVenueData = {
     body?: never;
     path: {
         /**
-         * Id
+         * Venue Id
          */
-        id: string;
+        venue_id: string;
     };
     query?: never;
-    url: '/api/v1/items/{id}';
+    url: '/api/v1/venues/{venue_id}';
 };
 
-export type itemsReadItemErrors = {
+export type venuesReadVenueErrors = {
     /**
      * Validation Error
      */
     422: HTTPValidationError;
 };
 
-export type itemsReadItemError = itemsReadItemErrors[keyof itemsReadItemErrors];
+export type venuesReadVenueError = venuesReadVenueErrors[keyof venuesReadVenueErrors];
 
-export type itemsReadItemResponses = {
+export type venuesReadVenueResponses = {
     /**
      * Successful Response
      */
-    200: ItemPublic;
+    200: VenuePublic;
 };
 
-export type itemsReadItemResponse = itemsReadItemResponses[keyof itemsReadItemResponses];
+export type venuesReadVenueResponse = venuesReadVenueResponses[keyof venuesReadVenueResponses];
 
-export type itemsUpdateItemData = {
-    body: ItemUpdate;
+export type venuesUpdateVenueData = {
+    body: VenueUpdate;
     path: {
         /**
-         * Id
+         * Venue Id
          */
-        id: string;
+        venue_id: string;
     };
     query?: never;
-    url: '/api/v1/items/{id}';
+    url: '/api/v1/venues/{venue_id}';
 };
 
-export type itemsUpdateItemErrors = {
+export type venuesUpdateVenueErrors = {
     /**
      * Validation Error
      */
     422: HTTPValidationError;
 };
 
-export type itemsUpdateItemError = itemsUpdateItemErrors[keyof itemsUpdateItemErrors];
+export type venuesUpdateVenueError = venuesUpdateVenueErrors[keyof venuesUpdateVenueErrors];
 
-export type itemsUpdateItemResponses = {
+export type venuesUpdateVenueResponses = {
     /**
      * Successful Response
      */
-    200: ItemPublic;
+    200: VenuePublic;
 };
 
-export type itemsUpdateItemResponse = itemsUpdateItemResponses[keyof itemsUpdateItemResponses];
+export type venuesUpdateVenueResponse = venuesUpdateVenueResponses[keyof venuesUpdateVenueResponses];
+
+export type bookingsReadBookingsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Status
+         */
+        status?: BookingStatus | null;
+    };
+    url: '/api/v1/bookings/';
+};
+
+export type bookingsReadBookingsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type bookingsReadBookingsError = bookingsReadBookingsErrors[keyof bookingsReadBookingsErrors];
+
+export type bookingsReadBookingsResponses = {
+    /**
+     * Successful Response
+     */
+    200: BookingsPublic;
+};
+
+export type bookingsReadBookingsResponse = bookingsReadBookingsResponses[keyof bookingsReadBookingsResponses];
+
+export type bookingsCreateBookingData = {
+    body: BookingCreate;
+    path?: never;
+    query?: never;
+    url: '/api/v1/bookings/';
+};
+
+export type bookingsCreateBookingErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type bookingsCreateBookingError = bookingsCreateBookingErrors[keyof bookingsCreateBookingErrors];
+
+export type bookingsCreateBookingResponses = {
+    /**
+     * Successful Response
+     */
+    200: BookingPublic;
+};
+
+export type bookingsCreateBookingResponse = bookingsCreateBookingResponses[keyof bookingsCreateBookingResponses];
+
+export type bookingsDeleteBookingData = {
+    body?: never;
+    path: {
+        /**
+         * Booking Id
+         */
+        booking_id: string;
+    };
+    query?: never;
+    url: '/api/v1/bookings/{booking_id}';
+};
+
+export type bookingsDeleteBookingErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type bookingsDeleteBookingError = bookingsDeleteBookingErrors[keyof bookingsDeleteBookingErrors];
+
+export type bookingsDeleteBookingResponses = {
+    /**
+     * Successful Response
+     */
+    200: Message;
+};
+
+export type bookingsDeleteBookingResponse = bookingsDeleteBookingResponses[keyof bookingsDeleteBookingResponses];
+
+export type bookingsReadBookingData = {
+    body?: never;
+    path: {
+        /**
+         * Booking Id
+         */
+        booking_id: string;
+    };
+    query?: never;
+    url: '/api/v1/bookings/{booking_id}';
+};
+
+export type bookingsReadBookingErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type bookingsReadBookingError = bookingsReadBookingErrors[keyof bookingsReadBookingErrors];
+
+export type bookingsReadBookingResponses = {
+    /**
+     * Successful Response
+     */
+    200: BookingPublic;
+};
+
+export type bookingsReadBookingResponse = bookingsReadBookingResponses[keyof bookingsReadBookingResponses];
+
+export type bookingsApproveBookingData = {
+    body?: never;
+    path: {
+        /**
+         * Booking Id
+         */
+        booking_id: string;
+    };
+    query?: never;
+    url: '/api/v1/bookings/{booking_id}/approve';
+};
+
+export type bookingsApproveBookingErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type bookingsApproveBookingError = bookingsApproveBookingErrors[keyof bookingsApproveBookingErrors];
+
+export type bookingsApproveBookingResponses = {
+    /**
+     * Successful Response
+     */
+    200: BookingPublic;
+};
+
+export type bookingsApproveBookingResponse = bookingsApproveBookingResponses[keyof bookingsApproveBookingResponses];
+
+export type bookingsRejectBookingData = {
+    body?: never;
+    path: {
+        /**
+         * Booking Id
+         */
+        booking_id: string;
+    };
+    query?: never;
+    url: '/api/v1/bookings/{booking_id}/reject';
+};
+
+export type bookingsRejectBookingErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type bookingsRejectBookingError = bookingsRejectBookingErrors[keyof bookingsRejectBookingErrors];
+
+export type bookingsRejectBookingResponses = {
+    /**
+     * Successful Response
+     */
+    200: BookingPublic;
+};
+
+export type bookingsRejectBookingResponse = bookingsRejectBookingResponses[keyof bookingsRejectBookingResponses];
+
+export type bookingsCancelBookingData = {
+    body?: never;
+    path: {
+        /**
+         * Booking Id
+         */
+        booking_id: string;
+    };
+    query?: never;
+    url: '/api/v1/bookings/{booking_id}/cancel';
+};
+
+export type bookingsCancelBookingErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type bookingsCancelBookingError = bookingsCancelBookingErrors[keyof bookingsCancelBookingErrors];
+
+export type bookingsCancelBookingResponses = {
+    /**
+     * Successful Response
+     */
+    200: BookingPublic;
+};
+
+export type bookingsCancelBookingResponse = bookingsCancelBookingResponses[keyof bookingsCancelBookingResponses];
 
 export type privateCreateUserData = {
     body: PrivateUserCreate;

@@ -16,8 +16,9 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
-import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
+import { Route as LayoutBookingsRouteImport } from './routes/_layout/bookings'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
+import { Route as LayoutVenuesRouteImport } from './routes/_layout/venues'
 
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
@@ -53,14 +54,19 @@ const LayoutAdminRoute = LayoutAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutItemsRoute = LayoutItemsRouteImport.update({
-  id: '/items',
-  path: '/items',
+const LayoutBookingsRoute = LayoutBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutVenuesRoute = LayoutVenuesRouteImport.update({
+  id: '/venues',
+  path: '/venues',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -71,8 +77,9 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/admin': typeof LayoutAdminRoute
-  '/items': typeof LayoutItemsRoute
+  '/bookings': typeof LayoutBookingsRoute
   '/settings': typeof LayoutSettingsRoute
+  '/venues': typeof LayoutVenuesRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -80,8 +87,9 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/admin': typeof LayoutAdminRoute
-  '/items': typeof LayoutItemsRoute
+  '/bookings': typeof LayoutBookingsRoute
   '/settings': typeof LayoutSettingsRoute
+  '/venues': typeof LayoutVenuesRoute
   '/': typeof LayoutIndexRoute
 }
 export interface FileRoutesById {
@@ -92,8 +100,9 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/_layout/admin': typeof LayoutAdminRoute
-  '/_layout/items': typeof LayoutItemsRoute
+  '/_layout/bookings': typeof LayoutBookingsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
+  '/_layout/venues': typeof LayoutVenuesRoute
   '/_layout/': typeof LayoutIndexRoute
 }
 export interface FileRouteTypes {
@@ -105,8 +114,9 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/admin'
-    | '/items'
+    | '/bookings'
     | '/settings'
+    | '/venues'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -114,8 +124,9 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/admin'
-    | '/items'
+    | '/bookings'
     | '/settings'
+    | '/venues'
     | '/'
   id:
     | '__root__'
@@ -125,8 +136,9 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/_layout/admin'
-    | '/_layout/items'
+    | '/_layout/bookings'
     | '/_layout/settings'
+    | '/_layout/venues'
     | '/_layout/'
   fileRoutesById: FileRoutesById
 }
@@ -189,11 +201,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAdminRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/items': {
-      id: '/_layout/items'
-      path: '/items'
-      fullPath: '/items'
-      preLoaderRoute: typeof LayoutItemsRouteImport
+    '/_layout/bookings': {
+      id: '/_layout/bookings'
+      path: '/bookings'
+      fullPath: '/bookings'
+      preLoaderRoute: typeof LayoutBookingsRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/settings': {
@@ -203,20 +215,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSettingsRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/venues': {
+      id: '/_layout/venues'
+      path: '/venues'
+      fullPath: '/venues'
+      preLoaderRoute: typeof LayoutVenuesRouteImport
+      parentRoute: typeof LayoutRoute
+    }
   }
 }
 
 interface LayoutRouteChildren {
   LayoutAdminRoute: typeof LayoutAdminRoute
-  LayoutItemsRoute: typeof LayoutItemsRoute
+  LayoutBookingsRoute: typeof LayoutBookingsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
+  LayoutVenuesRoute: typeof LayoutVenuesRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAdminRoute: LayoutAdminRoute,
-  LayoutItemsRoute: LayoutItemsRoute,
+  LayoutBookingsRoute: LayoutBookingsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
+  LayoutVenuesRoute: LayoutVenuesRoute,
   LayoutIndexRoute: LayoutIndexRoute,
 }
 
