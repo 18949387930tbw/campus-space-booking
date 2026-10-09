@@ -1,9 +1,11 @@
+from datetime import time
+
 from sqlalchemy import event
 from sqlmodel import Session, SQLModel, create_engine, select
 
 from app import crud
 from app.core.config import settings
-from app.models import User, UserCreate
+from app.models import User, UserCreate, UserRole, Venue
 
 database_url = str(settings.DATABASE_URL)
 connect_args = (
@@ -29,9 +31,32 @@ if database_url.startswith("sqlite"):
         cursor.close()
 
 
-# make sure all SQLModel models are imported (app.models) before initializing DB
-# otherwise, SQLModel might fail to initialize relationships properly
-# for more details: https://github.com/fastapi/full-stack-fastapi-template/issues/28
+DEMO_VENUES: list[dict] = [
+    {
+        "name": "Library 101",
+        "location": "Library Building, Floor 1",
+        "capacity": 40,
+        "open_time": time(8, 0),
+        "close_time": time(22, 0),
+        "description": "Quiet study room with a whiteboard.",
+    },
+    {
+        "name": "Innovation Lab",
+        "location": "Engineering Building, Floor 3",
+        "capacity": 24,
+        "open_time": time(9, 0),
+        "close_time": time(21, 0),
+        "description": "Project space with power outlets and monitors.",
+    },
+    {
+        "name": "Sports Hall",
+        "location": "Sports Center",
+        "capacity": 100,
+        "open_time": time(7, 0),
+        "close_time": time(23, 0),
+        "description": "Indoor court for team activities.",
+    },
+]
 
 
 def init_db(session: Session) -> None:
@@ -47,5 +72,22 @@ def init_db(session: Session) -> None:
             email=settings.FIRST_SUPERUSER,
             password=settings.FIRST_SUPERUSER_PASSWORD,
             is_superuser=True,
+            role=UserRole.admin,
         )
         user = crud.create_user(session=session, user_create=user_in)
+    elif user.role != UserRole.admin:
+        user.role = UserRole.admin
+        session.add(user)
+        session.commit()
+
+    _seed_demo_venues(session)
+
+
+def _seed_demo_venues(session: Session) -> None:
+    for payload in DEMO_VENUES:
+        existing = session.exec(
+            select(Venue).where(Venue.name == payload["name"])
+        ).first()
+        if existing is None:
+            session.add(Venue(**payload))
+    session.commit()
