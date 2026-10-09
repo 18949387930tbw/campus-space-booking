@@ -1,7 +1,8 @@
 from datetime import UTC, datetime, timedelta
 
+from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
-from sqlmodel import Session, select
+from sqlmodel import Session, delete, select
 
 from app.models import (
     Booking,
@@ -9,7 +10,9 @@ from app.models import (
     BookingSlot,
     BookingStatus,
     User,
+    UserRole,
     Venue,
+    get_datetime_utc,
 )
 
 SLOT_MINUTES = 30
@@ -162,3 +165,98 @@ def create_booking(session: Session, user: User, data: BookingCreate) -> Booking
 
     session.refresh(booking)
     return booking
+
+
+# --- State machine -----------------------------------------------------------
+
+ALLOWED_TRANSITIONS: dict[BookingStatus, set[BookingStatus]] = {
+    BookingStatus.pending: {
+        BookingStatus.approved,
+        BookingStatus.rejected,
+        BookingStatus.cancelled,
+    },
+    BookingStatus.approved: {BookingStatus.cancelled},
+}
+
+ACTION_TARGETS: dict[str, BookingStatus] = {
+    "approve": BookingStatus.approved,
+    "reject": BookingStatus.rejected,
+    "cancel": BookingStatus.cancelled,
+}
+
+
+class BookingStateError(BookingError):
+    """Raised when a booking status transition is not allowed."""
+
+
+class BookingPermissionError(BookingError):
+    """Raised when an actor is not allowed to perform an action."""
+
+
+def is_admin(user: User) -> bool:
+    return bool(user.is_superuser) or user.role == UserRole.admin
+
+
+def get_booking(session: Session, booking_id) -> Booking | None:
+    return session.get(Booking, booking_id)
+
+
+def list_bookings(
+    session: Session,
+    user: User,
+    *,
+    skip: int = 0,
+    limit: int = 100,
+    status: BookingStatus | None = None,
+) -> tuple[list[Booking], int]:
+    filters = []
+    if not is_admin(user):
+        filters.append(Booking.user_id == user.id)
+    if status is not None:
+        filters.append(Booking.status == status)
+
+    count_statement = select(func.count()).select_from(Booking)
+    list_statement = select(Booking)
+    for condition in filters:
+        count_statement = count_statement.where(condition)
+        list_statement = list_statement.where(condition)
+
+    count = session.exec(count_statement).one()
+    bookings = session.exec(
+        list_statement.order_by(Booking.start_time.desc())
+        .offset(skip)
+        .limit(limit)
+    ).all()
+    return list(bookings), count
+
+
+def transition_booking(
+    session: Session, booking: Booking, actor: User, action: str
+) -> Booking:
+    if action not in ACTION_TARGETS:
+        raise BookingStateError("unknown booking action")
+
+    target = ACTION_TARGETS[action]
+    if target not in ALLOWED_TRANSITIONS.get(booking.status, set()):
+        raise BookingStateError("invalid booking state transition")
+
+    if action in {"approve", "reject"} and not is_admin(actor):
+        raise BookingPermissionError("not allowed to decide bookings")
+
+    if action == "cancel" and booking.user_id != actor.id and not is_admin(actor):
+        raise BookingPermissionError("not allowed to cancel this booking")
+
+    if target in {BookingStatus.rejected, BookingStatus.cancelled}:
+        session.exec(
+            delete(BookingSlot).where(BookingSlot.booking_id == booking.id)
+        )
+
+    booking.status = target
+    booking.decided_by_id = actor.id
+    booking.decided_at = get_datetime_utc()
+    session.add(booking)
+    session.commit()
+    session.refresh(booking)
+    return booking
+
+
