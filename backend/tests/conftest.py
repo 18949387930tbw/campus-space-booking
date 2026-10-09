@@ -1,15 +1,24 @@
+import os
 from collections.abc import Generator
+from pathlib import Path
 
 import pytest
-from fastapi.testclient import TestClient
-from sqlmodel import Session, delete
 
-from app.core.config import settings
-from app.core.db import engine, init_db
-from app.main import app
-from app.models import Item, User
-from tests.utils.user import authentication_token_from_email
-from tests.utils.utils import get_superuser_token_headers
+TEST_DB_PATH = Path(__file__).resolve().parents[1] / "test.db"
+os.environ["DATABASE_URL"] = f"sqlite:///{TEST_DB_PATH.as_posix()}"
+
+for suffix in ("", "-wal", "-shm"):
+    Path(f"{TEST_DB_PATH}{suffix}").unlink(missing_ok=True)
+
+from fastapi.testclient import TestClient  # noqa: E402
+from sqlmodel import Session, delete  # noqa: E402
+
+from app.core.config import settings  # noqa: E402
+from app.core.db import engine, init_db  # noqa: E402
+from app.main import app  # noqa: E402
+from app.models import Item, User  # noqa: E402
+from tests.utils.user import authentication_token_from_email  # noqa: E402
+from tests.utils.utils import get_superuser_token_headers  # noqa: E402
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -17,11 +26,13 @@ def db() -> Generator[Session]:
     with Session(engine) as session:
         init_db(session)
         yield session
-        statement = delete(Item)
-        session.execute(statement)
-        statement = delete(User)
-        session.execute(statement)
+        session.execute(delete(Item))
+        session.execute(delete(User))
         session.commit()
+
+    engine.dispose()
+    for suffix in ("", "-wal", "-shm"):
+        Path(f"{TEST_DB_PATH}{suffix}").unlink(missing_ok=True)
 
 
 @pytest.fixture(scope="module")
