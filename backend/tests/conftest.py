@@ -16,7 +16,7 @@ from sqlmodel import Session, delete  # noqa: E402
 from app.core.config import settings  # noqa: E402
 from app.core.db import engine, init_db  # noqa: E402
 from app.main import app  # noqa: E402
-from app.models import Item, User  # noqa: E402
+from app.models import Booking, BookingSlot, Item, User, Venue  # noqa: E402
 from tests.utils.user import authentication_token_from_email  # noqa: E402
 from tests.utils.utils import get_superuser_token_headers  # noqa: E402
 
@@ -26,6 +26,9 @@ def db() -> Generator[Session]:
     with Session(engine) as session:
         init_db(session)
         yield session
+        session.execute(delete(BookingSlot))
+        session.execute(delete(Booking))
+        session.execute(delete(Venue))
         session.execute(delete(Item))
         session.execute(delete(User))
         session.commit()
