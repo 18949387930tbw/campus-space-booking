@@ -26,11 +26,22 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_HOST],
+    # Allow both localhost and 127.0.0.1 variants so the Vite dev server
+    # works no matter which host name is used in the browser.
+    allow_origins=[
+        settings.FRONTEND_HOST,
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
-app.frontend("/", directory=FRONTEND_DIR)
+
+# In local development the built frontend is served by Vite, so this
+# directory only exists after `npm run build` copied assets in. Mount it
+# only when present to keep `uvicorn app.main:app` runnable out of the box.
+if FRONTEND_DIR.is_dir():
+    app.frontend("/", directory=FRONTEND_DIR)

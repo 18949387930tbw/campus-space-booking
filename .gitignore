@@ -6,3 +6,16 @@ backend/app/frontend/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Local run artifacts
+backend/.venv/
+backend/app.db
+*.out.log
+*.err.log
+
+# IDE and local runtime artifacts
+.idea/
+*.bak
+*.db
+*.db-shm
+*.db-wal

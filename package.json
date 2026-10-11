@@ -12,5 +12,9 @@
     "test:ui": "bun run --filter frontend test:ui",
     "email:dev": "bun run --filter emails dev",
     "email:export": "bun run --filter emails export"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "@swc/core@1.16.13": true
   }
 }
